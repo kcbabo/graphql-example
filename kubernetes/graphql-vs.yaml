@@ -1,0 +1,33 @@
+apiVersion: gateway.solo.io/v1
+kind: VirtualService
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"gateway.solo.io/v1","kind":"VirtualService","metadata":{"annotations":{},"name":"default","namespace":"gloo-system"},"spec":{"virtualHost":{"domains":["*"],"routes":[{"graphqlSchemaRef":{"name":"default-petstore-8080","namespace":"gloo-system"},"matchers":[{"prefix":"/graphql"}]}]}}}
+  creationTimestamp: "2021-11-08T21:51:43Z"
+  generation: 32
+  name: default
+  namespace: gloo-system
+  resourceVersion: "134832"
+  uid: 31dacdfc-ad79-4e8c-8685-48e23cbb7d01
+spec:
+  virtualHost:
+    domains:
+    - '*'
+    options:
+      cors:
+        allowCredentials: true
+        allowHeaders:
+        - apollo-query-plan-experimental
+        - content-type
+        - x-apollo-tracing
+        allowMethods:
+        - POST
+        allowOriginRegex:
+        - \*
+    routes:
+    - graphqlSchemaRef:
+        name: default-mock-apis-5000
+        namespace: gloo-system
+      matchers:
+      - prefix: /graphql

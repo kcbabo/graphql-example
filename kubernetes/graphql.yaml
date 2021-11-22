@@ -1,0 +1,229 @@
+apiVersion: graphql.gloo.solo.io/v1alpha1
+kind: GraphQLSchema
+metadata:
+  name: default-mock-apis-5000
+  namespace: gloo-system
+spec:
+  enableIntrospection: true
+  resolutions:
+  - matcher:
+      fieldMatcher:
+        field: getTracks
+        type: Query
+    restResolver:
+      requestTransform:
+        headers:
+          :method:
+            typedProvider:
+              value: GET
+          :path:
+            typedProvider:
+              value: /tracks
+      upstreamRef:
+        name: default-mock-apis-5000
+        namespace: gloo-system
+  - matcher:
+      fieldMatcher:
+        field: getAuthors
+        type: Query
+    restResolver:
+      requestTransform:
+        headers:
+          :method:
+            typedProvider:
+              value: GET
+          :path:
+            typedProvider:
+              value: /authors
+      upstreamRef:
+        name: default-mock-apis-5000
+        namespace: gloo-system
+  - matcher:
+      fieldMatcher:
+        field: createTrack
+        type: Mutation
+    restResolver:
+      requestTransform:
+        headers:
+          :method:
+            typedProvider:
+              value: POST
+          :path:
+            typedProvider:
+              value: /tracks
+        outgoingBody:
+          node:
+            keyValues:
+            - key: title
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: title
+            - key: authorId
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: authorId
+            - key: id
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: id
+            - key: modulesCount
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: modulesCount
+            - key: thumbnail
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: thumbnail
+            - key: length
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: length
+      upstreamRef:
+        name: default-mock-apis-5000
+        namespace: gloo-system
+  - matcher:
+      fieldMatcher:
+        field: deleteTrack
+        type: Mutation
+    restResolver:
+      requestTransform:
+        headers:
+          :method:
+            typedProvider:
+              value: DELETE
+          :path:
+            graphqlArg:
+              argName: trackId
+            providerTemplate: /tracks/{}
+      upstreamRef:
+        name: default-mock-apis-5000
+        namespace: gloo-system
+  - matcher:
+      fieldMatcher:
+        field: getTrack
+        type: Query
+    restResolver:
+      requestTransform:
+        headers:
+          :method:
+            typedProvider:
+              value: GET
+          :path:
+            graphqlArg:
+              argName: trackId
+            providerTemplate: /tracks/{}
+      upstreamRef:
+        name: default-mock-apis-5000
+        namespace: gloo-system
+  - matcher:
+      fieldMatcher:
+        field: updateTrack
+        type: Mutation
+    restResolver:
+      requestTransform:
+        headers:
+          :method:
+            typedProvider:
+              value: PUT
+          :path:
+            graphqlArg:
+              argName: trackId
+            providerTemplate: /tracks/{}
+        outgoingBody:
+          node:
+            keyValues:
+            - key: thumbnail
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: thumbnail
+            - key: length
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: length
+            - key: modulesCount
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: modulesCount
+            - key: authorId
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: authorId
+            - key: id
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: id
+            - key: title
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: title
+      upstreamRef:
+        name: default-mock-apis-5000
+        namespace: gloo-system
+  schema: "
+    type Track { 
+      title: String 
+      length: Int 
+      modulesCount: Int 
+      thumbnail: String 
+      id: String 
+      authorId: String 
+    } 
+    type Author { 
+      id: String 
+      name: String 
+      photo: String 
+    } 
+    scalar JSON input TrackInput { 
+      length: Int 
+      modulesCount:Int 
+      title: String 
+      thumbnail: String 
+      authorId: String 
+      id: String 
+    } 
+    type Query { 
+      getTracks: [Track] 
+      getTrack(trackId: String!): Track 
+      getAuthors: [Author] 
+    } 
+    type Mutation { 
+      createTrack(trackInput: TrackInput!): JSON 
+      deleteTrack(trackId: String!): JSON 
+      updateTrack(trackId: String! trackInput:TrackInput!): JSON 
+    }"

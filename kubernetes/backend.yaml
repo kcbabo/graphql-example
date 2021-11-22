@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: apollo-backend
+  name: apollo-backend
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: apollo-backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: apollo-backend
+    spec:
+      containers:
+      - image: kcbabo/apollo-server:1.0
+        name: backend
+        ports:
+        - containerPort: 4000
+          name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apollo-backend
+  namespace: default
+  labels:
+    service: apollo-backend
+spec:
+  ports:
+  - port: 4000
+    protocol: TCP
+  selector:
+    app: apollo-backend

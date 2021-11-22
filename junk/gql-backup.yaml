@@ -1,0 +1,256 @@
+apiVersion: graphql.gloo.solo.io/v1alpha1
+kind: GraphQLSchema
+metadata:
+  name: default-mock-apis-5000
+  namespace: gloo-system
+spec:
+  enableIntrospection: true
+  resolutions:
+  - matcher:
+      fieldMatcher:
+        field: getTracks
+        type: Query
+    restResolver:
+      requestTransform:
+        headers:
+          :method:
+            typedProvider:
+              value: GET
+          :path:
+            typedProvider:
+              value: /tracks
+      upstreamRef:
+        name: default-mock-apis-5000
+        namespace: gloo-system
+  - matcher:
+      fieldMatcher:
+        field: createTrack
+        type: Mutation
+    restResolver:
+      requestTransform:
+        headers:
+          :method:
+            typedProvider:
+              value: POST
+          :path:
+            typedProvider:
+              value: /tracks
+        outgoingBody:
+          node:
+            keyValues:
+            - key: title
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: title
+            - key: topic
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: topic
+            - key: authorId
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: authorId
+            - key: id
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: id
+            - key: numberOfViews
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: numberOfViews
+            - key: modulesCount
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: modulesCount
+            - key: thumbnail
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: thumbnail
+            - key: createdAt
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: createdAt
+            - key: description
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: description
+            - key: length
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: length
+      upstreamRef:
+        name: default-mock-apis-5000
+        namespace: gloo-system
+  - matcher:
+      fieldMatcher:
+        field: deleteTrack
+        type: Mutation
+    restResolver:
+      requestTransform:
+        headers:
+          :method:
+            typedProvider:
+              value: DELETE
+          :path:
+            graphqlArg:
+              argName: trackId
+            providerTemplate: /tracks/{}
+      upstreamRef:
+        name: default-mock-apis-5000
+        namespace: gloo-system
+  - matcher:
+      fieldMatcher:
+        field: getTrack
+        type: Query
+    restResolver:
+      requestTransform:
+        headers:
+          :method:
+            typedProvider:
+              value: GET
+          :path:
+            graphqlArg:
+              argName: trackId
+            providerTemplate: /tracks/{}
+      upstreamRef:
+        name: default-mock-apis-5000
+        namespace: gloo-system
+  - matcher:
+      fieldMatcher:
+        field: updateTrack
+        type: Mutation
+    restResolver:
+      requestTransform:
+        headers:
+          :method:
+            typedProvider:
+              value: PUT
+          :path:
+            graphqlArg:
+              argName: trackId
+            providerTemplate: /tracks/{}
+        outgoingBody:
+          node:
+            keyValues:
+            - key: thumbnail
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: thumbnail
+            - key: createdAt
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: createdAt
+            - key: description
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: description
+            - key: length
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: length
+            - key: modulesCount
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: modulesCount
+            - key: topic
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: topic
+            - key: authorId
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: authorId
+            - key: id
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: id
+            - key: numberOfViews
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: numberOfViews
+            - key: title
+              value:
+                valueProvider:
+                  graphqlArg:
+                    argName: trackInput
+                    path:
+                    - key: title
+      upstreamRef:
+        name: default-mock-apis-5000
+        namespace: gloo-system
+  schema: "type Track {\n  title: String\n  numberOfViews: Int\n  length: Int\n  modulesCount:
+    Int\n  description: String\n  thumbnail: String\n  id: String\n  createdAt: String\n
+    \ authorId: String\n  topic: String\n}\n\n\"\"\"\nThe `JSON` scalar type represents
+    JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).\n\"\"\"\nscalar
+    JSON\n\ninput TrackInput {\n  description: String\n  length: Int\n  modulesCount:
+    Int\n  title: String\n  thumbnail: String\n  numberOfViews: Int\n  authorId: String\n
+    \ createdAt: String\n  topic: String\n  id: String\n}\n\ntype Query {\n  \"\"\"\n
+    \ Gets a list of all `Track` entities.\n  \n  Equivalent to GET /tracks\n  \"\"\"\n
+    \ getTracks: [Track]\n\n  \"\"\"\n  Gets the details of a single instance of a
+    `Track`.\n  \n  Equivalent to GET /tracks/{trackId}\n  \"\"\"\n  getTrack(\n    \"\"\"A
+    unique identifier for a `Track`.\"\"\"\n    trackId: String!\n  ): Track\n}\n\ntype
+    Mutation {\n  \"\"\"\n  Creates a new instance of a `Track`.\n  \n  Equivalent
+    to POST /tracks\n  \"\"\"\n  createTrack(trackInput: TrackInput!): JSON\n\n  \"\"\"\n
+    \ Deletes an existing `Track`.\n  \n  Equivalent to DELETE /tracks/{trackId}\n
+    \ \"\"\"\n  deleteTrack(\n    \"\"\"A unique identifier for a `Track`.\"\"\"\n
+    \   trackId: String!\n  ): JSON\n\n  \"\"\"\n  Updates an existing `Track`.\n
+    \ \n  Equivalent to PUT /tracks/{trackId}\n  \"\"\"\n  updateTrack(\n    \"\"\"A
+    unique identifier for a `Track`.\"\"\"\n    trackId: String!\n    trackInput:
+    TrackInput!\n  ): JSON\n}"
