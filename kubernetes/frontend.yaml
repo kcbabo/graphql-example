@@ -16,7 +16,7 @@ spec:
         app: apollo-frontend
     spec:
       containers:
-      - image: kcbabo/apollo-client:1.0
+      - image: kcbabo/apollo-client:latest
         name: frontend
         ports:
         - containerPort: 3000

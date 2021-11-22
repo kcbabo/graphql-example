@@ -8,7 +8,7 @@ spec:
   resolutions:
   - matcher:
       fieldMatcher:
-        field: getTracks
+        field: tracksForHome
         type: Query
     restResolver:
       requestTransform:
@@ -19,6 +19,24 @@ spec:
           :path:
             typedProvider:
               value: /tracks
+      upstreamRef:
+        name: default-mock-apis-5000
+        namespace: gloo-system
+  - matcher:
+      fieldMatcher:
+        field: author
+        type: Track
+    restResolver:
+      requestTransform:
+        headers:
+          :method:
+            typedProvider:
+              value: GET
+          :path:
+            graphqlParent:
+              path:
+                - key: authorId
+            providerTemplate: /authors/{}
       upstreamRef:
         name: default-mock-apis-5000
         namespace: gloo-system
@@ -202,7 +220,7 @@ spec:
       modulesCount: Int 
       thumbnail: String 
       id: String 
-      authorId: String 
+      author: Author 
     } 
     type Author { 
       id: String 
@@ -218,7 +236,7 @@ spec:
       id: String 
     } 
     type Query { 
-      getTracks: [Track] 
+      tracksForHome: [Track] 
       getTrack(trackId: String!): Track 
       getAuthors: [Author] 
     } 
